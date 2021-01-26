@@ -16,6 +16,13 @@ module.exports = {
       .set('layout', resolve('src/layout'))
       .set('base', resolve('src/base'))
       .set('static', resolve('src/static'))
+    // config
+    //   .plugin('html')
+    //   .tap(args => {
+    //     args[0].meta = { viewport: 'width=device-width,initial-scale=1,user-scalable=no' };
+
+    //     return args;
+    //   })
   },
   publicPath: './'
 }

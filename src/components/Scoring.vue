@@ -1,17 +1,12 @@
 <template>
   <v-container>
     <v-row>
-      <v-col><h1>IJRU Scoring System</h1> </v-col>
-    </v-row>
-    <v-row>
-      <v-btn depressed dark color="black" @click="reset('all')">
-        Reset All
-      </v-btn>
+      <v-col><h1>IJRU Scoring Calculator</h1> </v-col>
     </v-row>
     <v-row>
       <v-col>
         <h1>
-          DIFFICULTY
+          DIFFICULTY (D)
           <v-btn depressed dark color="black" @click="reset('d')">
             Reset Difficulty
           </v-btn>
@@ -101,7 +96,7 @@
       </v-col>
       <v-col>
         <h1>
-          Repeated Skill
+          Repeated Skill (U)
           <v-btn depressed dark color="black" @click="reset('r')">
             Reset Repeated
           </v-btn>
@@ -171,7 +166,7 @@
       >
     </v-row>
     <h1 class="mt-3">
-      PRESENTATION
+      PRESENTATION (P)
       <v-btn depressed dark color="black" @click="reset('p')">
         Reset Presentation
       </v-btn>
@@ -185,13 +180,9 @@
             Reset Form/Execution
           </v-btn>
         </h3>
-        <div class="d-flex levelBox">
-          <div class="text-h6 levelTitle text-center">+</div>
-          <div class="text-h6 levelTitle text-center">Tick</div>
-          <div class="text-h6 levelTitle text-center">-</div>
-        </div>
-        <div class="d-flex levelBox">
-          <div class="text-h6 levelTitle">
+        <div class="pre-table">
+          <div class="text-h6 text-center pre-table-col">
+            <div class="text-h6 levelTitle text-center">+</div>
             <number-input
               style="margin: auto"
               v-model="pFormPlus"
@@ -201,7 +192,9 @@
               @change="cal('pf')"
             ></number-input>
           </div>
-          <div class="text-h6 levelTitle">
+
+          <div class="text-h6 pre-table-col text-center">
+            <div class="text-h6 levelTitle text-center">Tick</div>
             <number-input
               style="margin: auto"
               v-model="pFormTick"
@@ -211,7 +204,9 @@
               @change="cal('pf')"
             ></number-input>
           </div>
-          <div class="text-h6 levelTitle">
+
+          <div class="text-h6 pre-table-col text-center">
+            <div class="text-h6 levelTitle text-center">-</div>
             <number-input
               style="margin: auto"
               v-model="pFormMinus"
@@ -222,6 +217,7 @@
             ></number-input>
           </div>
         </div>
+
         <!-- {{ pFormScore }} -->
       </v-col>
     </v-row>
@@ -236,13 +232,9 @@
             Reset Entertainment
           </v-btn>
         </h3>
-        <div class="d-flex levelBox">
-          <div class="text-h6 levelTitle text-center">+</div>
-          <div class="text-h6 levelTitle text-center">Tick</div>
-          <div class="text-h6 levelTitle text-center">-</div>
-        </div>
-        <div class="d-flex levelBox">
-          <div class="text-h6 levelTitle">
+        <div class="pre-table">
+          <div class="text-h6 text-center pre-table-col">
+            <div class="text-h6 levelTitle text-center">+</div>
             <number-input
               style="margin: auto"
               v-model="pEnterPlus"
@@ -252,7 +244,9 @@
               @change="cal('pe')"
             ></number-input>
           </div>
-          <div class="text-h6 levelTitle">
+
+          <div class="text-h6 pre-table-col text-center">
+            <div class="text-h6 levelTitle text-center">Tick</div>
             <number-input
               style="margin: auto"
               v-model="pEnterTick"
@@ -262,7 +256,9 @@
               @change="cal('pe')"
             ></number-input>
           </div>
-          <div class="text-h6 levelTitle">
+
+          <div class="text-h6 pre-table-col text-center">
+            <div class="text-h6 levelTitle text-center">-</div>
             <number-input
               style="margin: auto"
               v-model="pEnterMinus"
@@ -273,6 +269,7 @@
             ></number-input>
           </div>
         </div>
+
         <!-- {{ pEnterScore }} -->
       </v-col>
     </v-row>
@@ -287,13 +284,9 @@
             Reset Musicality
           </v-btn>
         </h3>
-        <div class="d-flex levelBox">
-          <div class="text-h6 levelTitle text-center">+</div>
-          <div class="text-h6 levelTitle text-center">Tick</div>
-          <div class="text-h6 levelTitle text-center">-</div>
-        </div>
-        <div class="d-flex levelBox">
-          <div class="text-h6 levelTitle">
+        <div class="pre-table">
+          <div class="text-h6 text-center pre-table-col">
+            <div class="text-h6 levelTitle text-center">+</div>
             <number-input
               style="margin: auto"
               v-model="pMusicPlus"
@@ -303,7 +296,9 @@
               @change="cal('pm')"
             ></number-input>
           </div>
-          <div class="text-h6 levelTitle">
+
+          <div class="text-h6 pre-table-col text-center">
+            <div class="text-h6 levelTitle text-center">Tick</div>
             <number-input
               style="margin: auto"
               v-model="pMusicTick"
@@ -313,7 +308,9 @@
               @change="cal('pm')"
             ></number-input>
           </div>
-          <div class="text-h6 levelTitle">
+
+          <div class="text-h6 pre-table-col text-center">
+            <div class="text-h6 levelTitle text-center">-</div>
             <number-input
               style="margin: auto"
               v-model="pMusicMinus"
@@ -324,6 +321,7 @@
             ></number-input>
           </div>
         </div>
+
         <!-- {{ pMusicScore }} -->
       </v-col>
     </v-row>
@@ -338,7 +336,7 @@
     <!-- up Presentation Score up -->
 
     <h1 class="mt-3">
-      REQUIRED ELEMENTS
+      REQUIRED ELEMENTS (Q)
       <v-btn depressed dark color="black" @click="reset('re')">
         Reset REQUIRED ELEMENTS
       </v-btn>
@@ -395,7 +393,7 @@
     </v-row>
 
     <h1 class="mt-3">
-      DEDUCTION
+      DEDUCTION (M)
       <v-btn depressed dark color="black" @click="reset('de')">
         Reset DEDUCTION
       </v-btn>
@@ -420,22 +418,13 @@
         </div></v-col
       >
     </v-row>
-    <h1 class="mt-3">FINAL RESULT</h1>
-    <v-row>
-      <v-col
-        ><div class="text-h5">R = ( D - U ) × P × M × Q</div>
-        <div class="d-flex align-center mt-5">
-          <h2>Final Score : {{ finalScore }}</h2>
-        </div></v-col
-      >
-    </v-row>
   </v-container>
 </template>
 
 <script>
 export default {
   name: "Scoring",
-
+  props: ["finalScore"],
   data: () => ({
     dlv0: 0,
     dlv1: 0,
@@ -473,11 +462,10 @@ export default {
     requiredScore: 0,
     miss: 0,
     deductionScore: 0,
-    finalScore: 0,
   }),
   methods: {
     reset(type) {
-      if (type == "d") {
+      if (type == "d" || type == "all") {
         this.dlv0 = 0;
         this.dlv1 = 0;
         this.dlv2 = 0;
@@ -487,14 +475,16 @@ export default {
         this.dlv6 = 0;
         this.dlv7 = 0;
         this.dlv8 = 0;
-      } else if (type == "r") {
+      }
+      if (type == "r" || type == "all") {
         this.rlv3 = 0;
         this.rlv4 = 0;
         this.rlv5 = 0;
         this.rlv6 = 0;
         this.rlv7 = 0;
         this.rlv8 = 0;
-      } else if (type == "p") {
+      }
+      if (type == "p" || type == "all") {
         this.pFormPlus = 0;
         this.pFormTick = 0;
         this.pFormMinus = 0;
@@ -504,23 +494,28 @@ export default {
         this.pMusicPlus = 0;
         this.pMusicTick = 0;
         this.pMusicMinus = 0;
-      } else if (type == "pf") {
+      }
+      if (type == "pf" || type == "all") {
         this.pFormPlus = 0;
         this.pFormTick = 0;
         this.pFormMinus = 0;
-      } else if (type == "pe") {
+      }
+      if (type == "pe" || type == "all") {
         this.pEnterPlus = 0;
         this.pEnterTick = 0;
         this.pEnterMinus = 0;
-      } else if (type == "pm") {
+      }
+      if (type == "pm" || type == "all") {
         this.pMusicPlus = 0;
         this.pMusicTick = 0;
         this.pMusicMinus = 0;
-      } else if (type == "re") {
+      }
+      if (type == "re" || type == "all") {
         this.rM = 0;
         this.rGAP = 0;
         this.rWAR = 0;
-      } else if (type == "de") {
+      }
+      if (type == "de" || type == "all") {
         this.miss = 0;
       }
     },
@@ -535,15 +530,15 @@ export default {
       var l7 = 0;
       var l8 = 0;
       if (type == "d") {
-        l0 = this.round(0.1 * Math.pow(1.8, 0.5) * this.dlv0, 2);
-        l1 = this.round(0.1 * Math.pow(1.8, 1) * this.dlv1, 2);
-        l2 = this.round(0.1 * Math.pow(1.8, 2) * this.dlv2, 2);
-        l3 = this.round(0.1 * Math.pow(1.8, 3) * this.dlv3, 2);
-        l4 = this.round(0.1 * Math.pow(1.8, 4) * this.dlv4, 2);
-        l5 = this.round(0.1 * Math.pow(1.8, 5) * this.dlv5, 2);
-        l6 = this.round(0.1 * Math.pow(1.8, 6) * this.dlv6, 2);
-        l7 = this.round(0.1 * Math.pow(1.8, 7) * this.dlv7, 2);
-        l8 = this.round(0.1 * Math.pow(1.8, 8) * this.dlv8, 2);
+        l0 = this.dlv0 * 0.13; //this.round(0.1 * Math.pow(1.8, 0.5) * this.dlv0, 2);
+        l1 = this.dlv1 * 0.18; //this.round(0.1 * Math.pow(1.8, 1) * this.dlv1, 2);
+        l2 = this.dlv2 * 0.32; //this.round(0.1 * Math.pow(1.8, 2) * this.dlv2, 2);
+        l3 = this.dlv3 * 0.58; //this.round(0.1 * Math.pow(1.8, 3) * this.dlv3, 2);
+        l4 = this.dlv4 * 1.05; //this.round(0.1 * Math.pow(1.8, 4) * this.dlv4, 2);
+        l5 = this.dlv5 * 1.89; //this.round(0.1 * Math.pow(1.8, 5) * this.dlv5, 2);
+        l6 = this.dlv6 * 3.4; //this.round(0.1 * Math.pow(1.8, 6) * this.dlv6, 2);
+        l7 = this.dlv7 * 6.12; //this.round(0.1 * Math.pow(1.8, 7) * this.dlv7, 2);
+        l8 = this.dlv8 * 11.02; //this.round(0.1 * Math.pow(1.8, 8) * this.dlv8, 2);
       } else if (type == "r") {
         l3 = this.round(0.1 * Math.pow(1.8, 3) * this.rlv3, 2);
         l4 = this.round(0.1 * Math.pow(1.8, 4) * this.rlv4, 2);
@@ -593,22 +588,32 @@ export default {
 
       // var m = 0.025 * this.miss;
       if (type == "d") {
-        this.difficultyScore = this.round(
-          l0 + l1 + l2 + l3 + l4 + l5 + l6 + l7 + l8,
-          4
-        );
+        // this.difficultyScore = this.round(
+        //   l0 + l1 + l2 + l3 + l4 + l5 + l6 + l7 + l8,
+        //   4
+        // );
+        this.difficultyScore = l0 + l1 + l2 + l3 + l4 + l5 + l6 + l7 + l8;
       } else if (type == "r") {
         this.repeatedScore = this.round(
           l0 + l1 + l2 + l3 + l4 + l5 + l6 + l7 + l8,
           4
         );
       }
+      let score = {
+        finalScore:
+          (this.difficultyScore - this.repeatedScore) *
+          this.presentationScore *
+          this.deductionScore *
+          this.requiredScore,
+      };
 
-      this.finalScore =
-        (this.difficultyScore - this.repeatedScore) *
-        this.presentationScore *
-        this.deductionScore *
-        this.requiredScore;
+      this.$emit("updateScore", score);
+
+      // this.finalScore =
+      //   (this.difficultyScore - this.repeatedScore) *
+      //   this.presentationScore *
+      //   this.deductionScore *
+      //   this.requiredScore;
     },
     round(number, precision) {
       return Math.round(+number + "e" + precision) / Math.pow(10, precision);
@@ -625,8 +630,29 @@ export default {
 }
 .levelTitle {
   width: 180px;
+  word-wrap: break-word;
+}
+.pre-table-col {
+  width: 180px;
 }
 .number-input {
   width: 150px;
+}
+
+.pre-table {
+  display: flex;
+}
+
+@media only screen and (max-width: 600px) {
+  .levelTitle {
+    width: 120px;
+  }
+  .pre-table {
+    display: block;
+  }
+  .pre-table-col {
+    display: flex;
+    width: auto;
+  }
 }
 </style>
