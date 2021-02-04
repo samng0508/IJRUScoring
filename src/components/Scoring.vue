@@ -5,6 +5,16 @@
     </v-row>
     <v-row>
       <v-col>
+        <v-text-field
+          v-model="name"
+          label="Your Name"
+          placeholder="Your Name"
+          solo
+        ></v-text-field
+      ></v-col>
+    </v-row>
+    <v-row>
+      <v-col>
         <h1>
           DIFFICULTY (D)
           <v-btn depressed dark color="black" @click="reset('d')">
@@ -391,6 +401,11 @@
         </div>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col
+        ><h3>Required Elements score : {{ requiredScore }}</h3></v-col
+      >
+    </v-row>
 
     <h1 class="mt-3">
       DEDUCTION (M)
@@ -418,14 +433,69 @@
         </div></v-col
       >
     </v-row>
+    <v-footer fixed padless elevation="5" height="140">
+      <v-container>
+        <v-row>
+          <v-col
+            ><div class="d-flex align-center">
+              <div>
+                <h2>
+                  FINAL RESULT
+                  <span style="color: red">(R = ( D - U ) × P × M × Q)</span>
+                  :
+                </h2>
+                <div>
+                  <h3>Final Score : {{ finalScore }}</h3>
+                </div>
+              </div>
+
+              <div>
+                <v-btn
+                  elevation="2"
+                  style="padding: 5px; margin-left: 5px"
+                  value="Reset"
+                  @click="reset('all')"
+                  x-large
+                  text
+                  dark
+                  color="black"
+                  ><font-awesome-icon
+                    :icon="['fas', 'circle-notch']"
+                    spin
+                    size="2x"
+                  />
+                  <span style="font-size: 20px; margin-left: 5px"
+                    >Reset All</span
+                  >
+                </v-btn>
+                <v-btn
+                  elevation="2"
+                  style="padding: 5px; margin-left: 5px"
+                  value="Reset"
+                  @click="updateLoad"
+                  x-large
+                  text
+                  dark
+                  color="black"
+                  ><font-awesome-icon :icon="['fas', 'print']" size="2x" />
+                  <span style="font-size: 20px; margin-left: 5px">Print</span>
+                </v-btn>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-footer>
   </v-container>
 </template>
 
 <script>
+import jsPDF from "jspdf";
+
 export default {
   name: "Scoring",
-  props: ["finalScore"],
   data: () => ({
+    name: "",
     dlv0: 0,
     dlv1: 0,
     dlv2: 0,
@@ -462,6 +532,7 @@ export default {
     requiredScore: 0,
     miss: 0,
     deductionScore: 0,
+    finalScore: 0,
   }),
   methods: {
     reset(type) {
@@ -540,12 +611,12 @@ export default {
         l7 = this.dlv7 * 6.12; //this.round(0.1 * Math.pow(1.8, 7) * this.dlv7, 2);
         l8 = this.dlv8 * 11.02; //this.round(0.1 * Math.pow(1.8, 8) * this.dlv8, 2);
       } else if (type == "r") {
-        l3 = this.round(0.1 * Math.pow(1.8, 3) * this.rlv3, 2);
-        l4 = this.round(0.1 * Math.pow(1.8, 4) * this.rlv4, 2);
-        l5 = this.round(0.1 * Math.pow(1.8, 5) * this.rlv5, 2);
-        l6 = this.round(0.1 * Math.pow(1.8, 6) * this.rlv6, 2);
-        l7 = this.round(0.1 * Math.pow(1.8, 7) * this.rlv7, 2);
-        l8 = this.round(0.1 * Math.pow(1.8, 8) * this.rlv8, 2);
+        l3 = this.rlv3 * 0.58; //this.round(0.1 * Math.pow(1.8, 3) * this.rlv3, 2);
+        l4 = this.rlv4 * 1.05; //this.round(0.1 * Math.pow(1.8, 4) * this.rlv4, 2);
+        l5 = this.rlv5 * 1.89; //this.round(0.1 * Math.pow(1.8, 5) * this.rlv5, 2);
+        l6 = this.rlv6 * 3.4; //this.round(0.1 * Math.pow(1.8, 6) * this.rlv6, 2);
+        l7 = this.rlv7 * 6.12; //this.round(0.1 * Math.pow(1.8, 7) * this.rlv7, 2);
+        l8 = this.rlv8 * 11.02; //this.round(0.1 * Math.pow(1.8, 8) * this.rlv8, 2);
       } else if (type == "pf") {
         if (this.pFormPlus + this.pFormTick + this.pFormMinus == 0) {
           this.pFormScore = 0;
@@ -573,11 +644,18 @@ export default {
       }
 
       //presentation Score
-      this.presentationScore =
+      // this.presentationScore =
+      //   1 +
+      //   ((0.6 / 2) * this.pFormScore +
+      //     (0.6 / 4) * this.pEnterScore +
+      //     (0.6 / 4) * this.pMusicScore);
+      this.presentationScore = this.round(
         1 +
-        ((0.6 / 2) * this.pFormScore +
-          (0.6 / 4) * this.pEnterScore +
-          (0.6 / 4) * this.pMusicScore);
+          ((0.6 / 2) * this.pFormScore +
+            (0.6 / 4) * this.pEnterScore +
+            (0.6 / 4) * this.pMusicScore),
+        4
+      );
 
       //DEDUCTION
       this.deductionScore = 1 - this.miss * 0.025;
@@ -588,37 +666,111 @@ export default {
 
       // var m = 0.025 * this.miss;
       if (type == "d") {
-        // this.difficultyScore = this.round(
-        //   l0 + l1 + l2 + l3 + l4 + l5 + l6 + l7 + l8,
-        //   4
-        // );
-        this.difficultyScore = l0 + l1 + l2 + l3 + l4 + l5 + l6 + l7 + l8;
+        this.difficultyScore = this.round(
+          l0 + l1 + l2 + l3 + l4 + l5 + l6 + l7 + l8,
+          4
+        );
+        // this.difficultyScore = l0 + l1 + l2 + l3 + l4 + l5 + l6 + l7 + l8;
       } else if (type == "r") {
         this.repeatedScore = this.round(
           l0 + l1 + l2 + l3 + l4 + l5 + l6 + l7 + l8,
           4
         );
       }
-      let score = {
-        finalScore:
-          (this.difficultyScore - this.repeatedScore) *
-          this.presentationScore *
-          this.deductionScore *
-          this.requiredScore,
-      };
-
-      this.$emit("updateScore", score);
 
       // this.finalScore =
       //   (this.difficultyScore - this.repeatedScore) *
       //   this.presentationScore *
       //   this.deductionScore *
       //   this.requiredScore;
+      this.finalScore = this.round(
+        (this.difficultyScore - this.repeatedScore) *
+          this.presentationScore *
+          this.deductionScore *
+          this.requiredScore,
+        4
+      );
     },
     round(number, precision) {
       return Math.round(+number + "e" + precision) / Math.pow(10, precision);
       //same as:
       //return Number(Math.round(+number + 'e' + precision) + 'e-' + precision);
+    },
+    updateLoad() {
+      this.$emit("update", true);
+    },
+    print() {
+      // this.$router.push('/print');
+
+      var doc = new jsPDF();
+      var width = doc.internal.pageSize.getWidth();
+      var height = doc.internal.pageSize.getHeight();
+      console.log(width);
+      console.log(height);
+      doc.addImage(
+        require("../assets/print/score.png"),
+        "PNG",
+        -1,
+        -1,
+        width + 1,
+        height + 1
+      );
+      //Name
+      if (this.name.trim().length >= 20) {
+        doc.setFontSize(20);
+        doc.setTextColor(255, 255, 255);
+        doc.text(this.name, 45, 67);
+      } else if (this.name.trim().length >= 16) {
+        doc.setFontSize(22);
+        doc.setTextColor(255, 255, 255);
+        doc.text(this.name, 45, 68);
+      } else if (this.name.trim().length >= 12) {
+        doc.setFontSize(25);
+        doc.setTextColor(255, 255, 255);
+        doc.text(this.name, 45, 68);
+      } else if (this.name.trim().length >= 8) {
+        doc.setFontSize(28);
+        doc.setTextColor(255, 255, 255);
+        doc.text(this.name, 45, 69);
+      } else {
+        doc.setFontSize(35);
+        doc.setTextColor(255, 255, 255);
+        doc.text(this.name, 45, 70);
+      }
+
+      //D
+      doc.setFontSize(25);
+      doc.setTextColor(255, 255, 255);
+
+      doc.text(this.round(this.difficultyScore, 2).toString(), 155, 120);
+
+      //U
+      doc.setFontSize(25);
+      doc.setTextColor(255, 255, 255);
+      doc.text(this.round(this.repeatedScore, 2).toString(), 155, 142);
+
+      //P
+      doc.setFontSize(25);
+      doc.setTextColor(255, 255, 255);
+      doc.text(this.round(this.presentationScore, 2).toString(), 155, 162);
+
+      //Q
+      doc.setFontSize(25);
+      doc.setTextColor(255, 255, 255);
+      doc.text(this.round(this.requiredScore, 2).toString(), 155, 182);
+
+      //M
+      doc.setFontSize(25);
+      doc.setTextColor(255, 255, 255);
+      doc.text(this.round(this.deductionScore, 2).toString(), 155, 202);
+
+      //Final Result
+      doc.setFontSize(25);
+      doc.setTextColor(255, 255, 255);
+      doc.text(this.round(this.finalScore, 2).toString(), 155, 226);
+
+      doc.save(this.name + ".pdf");
+      this.$emit("update", false);
     },
   },
 };

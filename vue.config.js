@@ -24,5 +24,11 @@ module.exports = {
     //     return args;
     //   })
   },
-  publicPath: './'
+  publicPath: './',
+  pwa: {
+    workboxOptions: {
+      skipWaiting: true,
+      clientsClaim: true,
+    }
+  },
 }

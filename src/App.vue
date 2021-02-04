@@ -1,6 +1,9 @@
 <template>
   <v-app>
-    <v-app-bar app color="black" dark height="100">
+    <div class="loading" v-show="isLoading">
+      Loading...
+    </div>
+    <v-app-bar app color="black" dark height="100" style="z-index: 4">
       <div class="d-flex align-center">
         <!-- <v-img
           alt="Vuetify Logo"
@@ -75,51 +78,25 @@
     <v-main style="margin-bottom: 150px">
       <v-container fluid>
         <!-- If using vue-router -->
-        <Scoring
-          @updateScore="updateFinalScore"
-          :finalScore="finalScore"
-          ref="scoreRef"
-        />
+        <!-- <router-view></router-view> -->
+        <Scoring @update="selfUpdate" ref="score" />
       </v-container>
     </v-main>
-    <v-footer fixed padless elevation="5" height="140">
-      <v-container>
-        <v-row>
-          <v-col
-            ><div class="d-flex align-center">
-              <h2>
-                FINAL RESULT
-                <span style="color: red">(R = ( D - U ) × P × M × Q)</span>
-                :
-              </h2>
-              <v-btn
-                elevation="2"
-                style="padding: 5px; margin-left: 5px"
-                value="Reset"
-                @click="preResetAll"
-                x-large
-                text
-                dark
-                color="black"
-                ><font-awesome-icon
-                  :icon="['fas', 'circle-notch']"
-                  spin
-                  size="2x"
-                />
-                <span style="font-size: 20px; margin-left: 5px">Reset All</span>
-              </v-btn>
-            </div>
-
-            <div class="d-flex align-center">
-              <h3>Final Score : {{ finalScore }}</h3>
-            </div>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-footer>
   </v-app>
 </template>
 <style >
+.loading {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  height: 100%;
+  color: white;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+}
 html {
   touch-action: manipulation;
 }
@@ -155,19 +132,33 @@ import Scoring from "./components/Scoring";
 
 export default {
   name: "App",
-  data: () => ({
-    finalScore: 0,
-  }),
+  data() {
+    return {
+      finalScore: 0,
+      isLoading: false,
+    };
+  },
   components: {
     Scoring,
   },
   methods: {
-    updateFinalScore(score) {
-      this.finalScore = score.finalScore;
-    },
-    preResetAll() {
-      this.$refs.scoreRef.reset("all");
+    selfUpdate(val) {
+      this.isLoading = val;
     },
   },
+  watch: {
+    isLoading: function (val) {
+      if (val) {
+        setTimeout(() => this.$refs.score.print(), 100);
+      }
+    },
+  },
+  created: function () {
+    // alert("vue create");
+  },
+  beforeMount: function () {
+    // alert("vue beforeMount");
+  },
+  mounted: function () {},
 };
 </script>
